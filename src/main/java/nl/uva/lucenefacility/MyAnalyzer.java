@@ -28,7 +28,7 @@ import org.apache.lucene.analysis.util.FilteringTokenFilter;
 public class MyAnalyzer {
 
     private String eol = System.getProperty("line.separator");
-    private Integer tokenMinLength = Integer.MAX_VALUE;
+    private Integer tokenMinLength = Integer.MIN_VALUE;
     private Integer tokenMaxLength = Integer.MAX_VALUE;
     
 
@@ -40,7 +40,7 @@ public class MyAnalyzer {
     public MyAnalyzer(Boolean steming, ArrayList<String> stopCollection) { //In case of stopword removing
         stopList = new CharArraySet(stopCollection, true);
         this.stopwordRemooving = true;
-        this.tokenMinLength = 3;
+        this.tokenMinLength = 2;
         this.steming = steming;
     }
 
@@ -153,10 +153,10 @@ public class MyAnalyzer {
     
     private TokenStream getStandardTokenStream(TokenStream tokenStream){
         tokenStream = new LowerCaseFilter(tokenStream);
-//        tokenStream = new WordDelimiterFilter(tokenStream, WordDelimiterFilter.GENERATE_NUMBER_PARTS, null);
-//        tokenStream = new WordDelimiterFilter(tokenStream, WordDelimiterFilter.GENERATE_WORD_PARTS, null);
-//        tokenStream = new LengthFilter(tokenStream, tokenMinLength, tokenMaxLength);
-//        tokenStream = new RemoveNumberFilter(tokenStream);
+        tokenStream = new WordDelimiterFilter(tokenStream, WordDelimiterFilter.GENERATE_NUMBER_PARTS, null);
+        tokenStream = new WordDelimiterFilter(tokenStream, WordDelimiterFilter.GENERATE_WORD_PARTS, null);
+        tokenStream = new LengthFilter(tokenStream, tokenMinLength, tokenMaxLength);
+        tokenStream = new RemoveNumberFilter(tokenStream);
         return  tokenStream;
     }
 

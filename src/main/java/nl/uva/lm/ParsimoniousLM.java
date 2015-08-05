@@ -19,7 +19,7 @@ public final class ParsimoniousLM extends LanguageModel {
     private LanguageModel documentLM;
     private HashMap<String, Double> documentTV;
     private LanguageModel tmpLM;
-    private Double alpha = 0.005D;
+    private Double alpha = 0.05D;
     private Double probThreshold = 1e-5; //0.00001D;
     private Integer numberOfIttereation = 100;
 
