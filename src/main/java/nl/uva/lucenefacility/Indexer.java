@@ -40,7 +40,8 @@ public abstract class Indexer {
     private final Integer commonWordNum = Integer.parseInt(configFile.getProperty("COMMON_WORDS_NUM"));
     protected final Integer minDocLength = Integer.parseInt(configFile.getProperty("MIN_DOC_LENGTH"));
     private Map<String, Analyzer> analyzerMap = new HashMap<>();
-
+    protected Integer docCount = 0;
+    
     public Indexer() throws Exception, Throwable {
         try {
             this.analyzerMapInitializer(this.analyzerMap);

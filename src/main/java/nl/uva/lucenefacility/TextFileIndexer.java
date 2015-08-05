@@ -16,6 +16,7 @@ import static nl.uva.settings.Config.configFile;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.core.KeywordAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 
@@ -54,7 +55,7 @@ public class TextFileIndexer extends Indexer {
     protected void analyzerMapInitializer(Map<String, Analyzer> analyzerMap) {
 //        analyzerMap.put("ID", new KeywordAnalyzer());//StandardAnalyzer(Version.LUCENE_CURRENT));
         analyzerMap.put("ID", new MyAnalyzer(Boolean.FALSE).ArbitraryCharacterAsDelimiterAnalyzer('/'));
-//        analyzerMap.put("PATH", new MyAnalyzer(Boolean.FALSE).ArbitraryCharacterAsDelimiterAnalyzer('/'));
+        analyzerMap.put("PATH", new MyAnalyzer(Boolean.FALSE).ArbitraryCharacterAsDelimiterAnalyzer('/'));
     }
 
     @Override
@@ -67,16 +68,20 @@ public class TextFileIndexer extends Indexer {
 //            log.info("File " + tf.PathFromRoot + "is skeeped due to min length constraint: File Length=" + fileLength );
 //            return;
 //        }
-        doc.add(new Field("ID", tf.PathFromRoot, Field.Store.YES, Field.Index.ANALYZED_NO_NORMS, Field.TermVector.YES));
-//        doc.add(new Field("PATH", tf.PathFromRoot, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS));
+        doc.add(new Field("ID", tf.FileName, Field.Store.YES, Field.Index.ANALYZED_NO_NORMS, Field.TermVector.YES));
+        doc.add(new Field("PATH", tf.PathFromRoot, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS));
         doc.add(new Field("TEXT", tf.Content, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS));
         try {
             writer.addDocument(doc);
         } catch (IOException ex) {
             log.error(ex);
         }
-        log.info("Document " + tf.PathFromRoot + " has been indexed successfully...");
-}
+//        log.info("Douc number: " + docCount + " - Document " + tf.PathFromRoot + " has been indexed successfully...");
+        docCount++;
+        if(docCount%10000 ==0)
+            log.info(docCount);
+            
+    }
 
     public static void main(String[] args) throws Exception, Throwable {
         TextFileIndexer di = new TextFileIndexer();
