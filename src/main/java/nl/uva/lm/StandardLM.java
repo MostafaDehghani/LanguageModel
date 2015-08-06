@@ -60,6 +60,7 @@ public class StandardLM extends LanguageModel {
 //                tv.put(e.getKey(), e.getValue());
             }
         } catch (IOException ex) {
+            log.error(dId);
             log.error(ex);
             throw ex;
         }

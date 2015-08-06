@@ -168,6 +168,10 @@ public class LanguageModel {
         }
         return newLM;
     }
+    
+    public void Normalized(){
+        this.setModel(this.getNormalizedDestribution());
+    }
 
     public List<Map.Entry<String, Double>> getSorted() {
         List<Map.Entry<String, Double>> sorted = sortByValues(LanguageModel, false);

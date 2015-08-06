@@ -440,6 +440,7 @@ public class IndexInfo {
 //                }
 //            }
         } catch (IOException ex) {
+            log.error(docId);
             log.error(ex);
             throw ex;
         }

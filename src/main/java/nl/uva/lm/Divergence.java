@@ -27,7 +27,7 @@ public class Divergence {
     
     
     public Double JsdScore(LanguageModel lm1, LanguageModel lm2){
-        return this.JsdScore(lm1.getModel(), lm1.getModel());
+        return this.JsdScore(lm1.getModel(), lm2.getModel());
     }
     
     private Double JsdScore(HashMap<String, Double> d1, HashMap<String, Double> d2) {
@@ -46,7 +46,7 @@ public class Divergence {
     }
     
     public Double KldScore(LanguageModel lm1, LanguageModel lm2){
-        return this.KldScore(lm1.getModel(), lm1.getModel());
+        return this.KldScore(lm1.getModel(), lm2.getModel());
     }
 
     private Double KldScore(HashMap<String, Double> d1, HashMap<String, Double> d2) {

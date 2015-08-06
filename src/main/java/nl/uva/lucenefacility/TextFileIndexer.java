@@ -62,12 +62,13 @@ public class TextFileIndexer extends Indexer {
     protected void IndexDoc(Object obj) throws Exception {
         TextFile tf = (TextFile) obj;
         Document doc = new Document();
-//        Integer fileLength = tf.Content.split("\\s+").length;
-//        if (fileLength <= minDocLength) //Filtering small documents
-//        {
-//            log.info("File " + tf.PathFromRoot + "is skeeped due to min length constraint: File Length=" + fileLength );
-//            return;
-//        }
+        Integer fileLength = tf.Content.split("\\s+").length;
+        if (fileLength <= minDocLength) //Filtering small documents
+        {
+            log.info("File " + tf.PathFromRoot + " is skeeped due to min length constraint: File Length=" + fileLength );
+//            tf.Content = "bla bla bla bla blaaa blaaaa blaaa bllllllaaaaa";
+            return;
+        }
         doc.add(new Field("ID", tf.FileName, Field.Store.YES, Field.Index.ANALYZED_NO_NORMS, Field.TermVector.YES));
         doc.add(new Field("PATH", tf.PathFromRoot, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS));
         doc.add(new Field("TEXT", tf.Content, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS));
@@ -78,7 +79,7 @@ public class TextFileIndexer extends Indexer {
         }
 //        log.info("Douc number: " + docCount + " - Document " + tf.PathFromRoot + " has been indexed successfully...");
         docCount++;
-        if(docCount%10000 ==0)
+        if(docCount%1000 ==0)
             log.info(docCount);
             
     }

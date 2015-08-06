@@ -5,7 +5,6 @@
  */
 package nl.uva.lm;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
 
@@ -33,6 +32,9 @@ public final class MixtureLM extends LanguageModel {
             }
             this.setProb(t, prob);
         }
+        this.Normalized();
     }
+    
+    
 
 }
