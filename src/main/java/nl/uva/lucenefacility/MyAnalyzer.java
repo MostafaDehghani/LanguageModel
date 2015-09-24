@@ -40,7 +40,8 @@ public class MyAnalyzer {
     public MyAnalyzer(Boolean steming, ArrayList<String> stopCollection) { //In case of stopword removing
         stopList = new CharArraySet(stopCollection, true);
         this.stopwordRemooving = true;
-        this.tokenMinLength = 2;
+        this.tokenMinLength = 3;
+        this.tokenMaxLength = 20;
         this.steming = steming;
     }
 

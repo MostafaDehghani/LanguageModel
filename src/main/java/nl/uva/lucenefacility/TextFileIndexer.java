@@ -29,7 +29,7 @@ public class TextFileIndexer extends Indexer {
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(TextFileIndexer.class.getName());
 
     public TextFileIndexer() throws Exception, Throwable {
-        super();
+        super(configFile.getProperty("INDEX_PATH"));
     }
 
     @Override
@@ -63,7 +63,7 @@ public class TextFileIndexer extends Indexer {
         TextFile tf = (TextFile) obj;
         Document doc = new Document();
         Integer fileLength = tf.Content.split("\\s+").length;
-        if (fileLength <= minDocLength) //Filtering small documents
+        if (fileLength < minDocLength) //Filtering small documents
         {
             log.info("File " + tf.PathFromRoot + " is skeeped due to min length constraint: File Length=" + fileLength );
 //            tf.Content = "bla bla bla bla blaaa blaaaa blaaa bllllllaaaaa";

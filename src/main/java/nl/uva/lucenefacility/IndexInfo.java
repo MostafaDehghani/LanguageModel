@@ -472,4 +472,20 @@ public class IndexInfo {
 //        this.ireader.
 //        return docs;
 //    }
+    
+     
+    public ArrayList<Integer> getDocsContainingTerm(String fieldName,String term) throws IOException {
+        
+        ArrayList<Integer> docs = new ArrayList<>();
+        TermsEnum te = MultiFields.getTerms(this.ireader, fieldName ).iterator();
+        BytesRef id = new BytesRef(term);
+        te.seekExact(id);
+        DocsEnum docsEnum = te.docs(null, null);
+        int docIdEnum;
+        while ((docIdEnum = docsEnum.nextDoc()) != DocIdSetIterator.NO_MORE_DOCS) {
+           docs.add(docIdEnum);
+        }
+        return docs;
+    }
+    
 }

@@ -42,21 +42,20 @@ public abstract class Indexer {
     private Map<String, Analyzer> analyzerMap = new HashMap<>();
     protected Integer docCount = 0;
     
-    public Indexer() throws Exception, Throwable {
+    public Indexer(String indexPathString) throws Exception, Throwable {
         try {
             this.analyzerMapInitializer(this.analyzerMap);
-            this.Indexer();
+            this.Indexer(indexPathString);
         } catch (Exception ex) {
             log.error(ex);
             throw ex;
         }
     }
 
-    public void Indexer() throws Exception, Throwable {
+    public void Indexer(String indexPathString) throws Exception, Throwable {
         try {
             log.info("----------------------- INDEXING--------------------------");
 
-            String indexPathString = configFile.getProperty("INDEX_PATH");
             Path ipath = FileSystems.getDefault().getPath(indexPathString);
             this.IndexesCleaner(indexPathString);
 
@@ -77,7 +76,7 @@ public abstract class Indexer {
                 log.info("Index without common words removing is created successfully...");
                 log.info("-------------------------------------------------");
                 if (commonWordsRemoving) {
-                    String tmpIndexPath = configFile.getProperty("INDEX_PATH") + "/tmp";
+                    String tmpIndexPath = indexPathString  + "/tmp";
                     Path tmpipath = FileSystems.getDefault().getPath(tmpIndexPath);
                     FileUtils.forceMkdir(new File(tmpIndexPath));
                     IndexReader ireader = DirectoryReader.open(FSDirectory.open(ipath));
