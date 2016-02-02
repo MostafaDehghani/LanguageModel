@@ -59,13 +59,13 @@ public class GroupGLM extends LanguageModel { //p(theta_r|t)
         for (Integer m : models.keySet()) {
             HashMap<Integer, Double> docsHM = new HashMap<>();
             for (int id : group.docs) {
-                if(m==0)
-                    docsHM.put(id, 0.0001D);
-                if(m==1)
-                    docsHM.put(id, 0.4999D);
-                if(m==2)
-                    docsHM.put(id, 0.5D);
-//                docsHM.put(id, 1.0 / models.size());
+//                if(m==0) //Relavance Model
+//                    docsHM.put(id, 0.0001D);
+//                if(m==1)  //General Model
+//                    docsHM.put(id, 0.4999D);
+//                if(m==2) //Specific Model
+//                    docsHM.put(id, 0.5D);
+                docsHM.put(id, 1.0 / models.size());
             }
             lambda_X_d.put(m, docsHM);
         }
@@ -119,7 +119,7 @@ public class GroupGLM extends LanguageModel { //p(theta_r|t)
             HashMap<Integer, LanguageModel> docsHM = this.modelSelectionProb.get(m);
             HashMap<Integer, Double> lambdas = new HashMap<>();
             for (Integer id : docsHM.keySet()) {
-//                Double denominator_Lambda = this.Get_M_step_denominator_Lambda(id);
+                Double denominator_Lambda = this.Get_M_step_denominator_Lambda(id);
                 for (String term : docsHM.get(id).getTerms()) {
                     // Updating relevance Model
                     if (m.equals(modelToBeUpdate)) {
@@ -128,11 +128,11 @@ public class GroupGLM extends LanguageModel { //p(theta_r|t)
                             this.models.get(m).setProb(term, newProb);
                     }
                 }
-                // Updating Lambdas
-//               Double newLambda = this.Get_M_step_numerator_Lambda(m, id) / denominator_Lambda;
-//               lambdas.put(id, newLambda);
+//                 Updating Lambdas
+               Double newLambda = this.Get_M_step_numerator_Lambda(m, id) / denominator_Lambda;
+               lambdas.put(id, newLambda);
             }
-//            this.lambda_X_d.put(m, lambdas);
+            this.lambda_X_d.put(m, lambdas);
         }
     }
 
@@ -188,5 +188,21 @@ public class GroupGLM extends LanguageModel { //p(theta_r|t)
                 this.M_step();
             }
         this.setModel(this.models.get(this.relavanceModelIndex).getModel());
+    }
+    
+    public HashMap<Integer, HashMap<Integer, Double>> getLambdas() {
+        //Change axises of lambda matrix 
+        HashMap<Integer, HashMap<Integer, Double>> lambdas = new HashMap<>();
+        for (Integer m : models.keySet()) {
+            for (int dId : lambda_X_d.get(m).keySet()) {
+                HashMap<Integer, Double> ls = lambdas.get(dId);
+                if(ls==null){
+                    ls = new HashMap<>();
+                }
+                ls.put(m,lambda_X_d.get(m).get(dId));
+                lambdas.put(dId, ls);
+            }
+        }
+        return lambdas;
     }
 }

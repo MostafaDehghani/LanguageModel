@@ -388,7 +388,7 @@ public class IndexInfo {
      * @return
      * @throws IOException
      */
-    public Integer getIndexId(String docID) throws IOException {
+    public Integer getIndexId(String docID) throws IOException, Exception {
         if (indexId == null) {
             this.indexId = new HashMap<>();
             for (int i = 0; i < this.ireader.numDocs(); i++) {
@@ -401,6 +401,8 @@ public class IndexInfo {
             }
 
         }
+//        if(this.indexId.get(docID) == null)
+//           throw new Exception(); 
         return this.indexId.get(docID);
 
 //        TermsEnum te = MultiFields.getTerms(this.ireader, "ID").iterator(null);
@@ -411,6 +413,10 @@ public class IndexInfo {
 //        while ((docIdEnum = docsEnum.nextDoc()) != DocIdSetIterator.NO_MORE_DOCS) {
 //            return docIdEnum;
 //        }
+    }
+    
+    public String getDocStringId(Integer docID) throws IOException {
+        return ireader.document(docID).get("ID");
     }
 
     public HashMap<String, Double> getDocTermFreqVector(Integer docId, String field) throws IOException {

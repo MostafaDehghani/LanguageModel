@@ -34,6 +34,7 @@ public class DocsGroup {
     private LanguageModel groupStandardLM;
     private LanguageModel GroupSpecificLM;
     private LanguageModel CollectionLM;
+    private HashMap<Integer, HashMap<Integer, Double>> lambdas; //doc -> (mode -> prob)
 
     public DocsGroup(IndexReader iReader, String field, ArrayList<Integer> docs) {
         this.iReader = iReader;
@@ -56,6 +57,7 @@ public class DocsGroup {
         }
         return this.groupGeneralizedLM;
     }
+    
 
     public LanguageModel getGroupHGeneralizedLM() throws IOException {
         if (this.groupHGeneralizedLM == null) {
@@ -64,6 +66,8 @@ public class DocsGroup {
         }
         return this.groupHGeneralizedLM;
     }
+    
+    
 
     public LanguageModel getGroupParsimoniouseLM() throws IOException {
         if (this.groupParsimoniouseLM == null) {
@@ -213,7 +217,15 @@ public class DocsGroup {
             this.GroupSpecificLM.setModel(new LanguageModel(specLM.getNormalizedEntrpy()).getNormalizedDestribution());
 //            this.GroupSpecificLM.setModel(specLM.getNormalizedDestribution());
          }
-          
+         
         return this.GroupSpecificLM;
+    }
+    
+    public HashMap<Integer, HashMap<Integer, Double>> getGroupLearnedLambdas() throws IOException {
+        if (this.lambdas == null) {
+            GroupGLM gGLM = new GroupGLM(this);
+            this.lambdas = gGLM.getLambdas();
+        }
+        return this.lambdas;
     }
 }

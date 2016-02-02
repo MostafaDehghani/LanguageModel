@@ -16,7 +16,6 @@ import static nl.uva.settings.Config.configFile;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.core.KeywordAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 
@@ -55,7 +54,7 @@ public class TextFileIndexer extends Indexer {
     protected void analyzerMapInitializer(Map<String, Analyzer> analyzerMap) {
 //        analyzerMap.put("ID", new KeywordAnalyzer());//StandardAnalyzer(Version.LUCENE_CURRENT));
         analyzerMap.put("ID", new MyAnalyzer(Boolean.FALSE).ArbitraryCharacterAsDelimiterAnalyzer('/'));
-        analyzerMap.put("PATH", new MyAnalyzer(Boolean.FALSE).ArbitraryCharacterAsDelimiterAnalyzer('/'));
+//        analyzerMap.put("PATH", new MyAnalyzer(Boolean.FALSE).ArbitraryCharacterAsDelimiterAnalyzer('/'));
     }
 
     @Override
@@ -66,11 +65,12 @@ public class TextFileIndexer extends Indexer {
         if (fileLength < minDocLength) //Filtering small documents
         {
             log.info("File " + tf.PathFromRoot + " is skeeped due to min length constraint: File Length=" + fileLength );
-//            tf.Content = "bla bla bla bla blaaa blaaaa blaaa bllllllaaaaa";
             return;
+//            tf.Content = "bllllllaaaaa bllllllaaaaa bllllllaaaaa";
+//            log.info("Content of file " + tf.PathFromRoot + " is changed to \"" +tf.Content+  "\" due to min length constraint: File Length=" + fileLength );
         }
         doc.add(new Field("ID", tf.FileName, Field.Store.YES, Field.Index.ANALYZED_NO_NORMS, Field.TermVector.YES));
-        doc.add(new Field("PATH", tf.PathFromRoot, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS));
+//        doc.add(new Field("PATH", tf.PathFromRoot, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS));
         doc.add(new Field("TEXT", tf.Content, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS));
         try {
             writer.addDocument(doc);
