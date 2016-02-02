@@ -4,8 +4,8 @@
 */DaTa/*
 */log/*
 nbactions.xml
-Config.properties
-*Config.java
+#Config.properties
+#*Config.java
 
 # Compiled source #
 ###################
