@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package nl.uva.generalinzedlm;
+package nl.uva.swlm;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -41,10 +41,10 @@ public class CalculateLM {
 //        System.out.println("SPLM:" + dGroup.getGroupSpecificLM().getSize());
         System.out.println("PLM" + dGroup.getGroupParsimoniouseLM().getTopK(20));
 //        System.out.println("PLM:" + dGroup.getGroupParsimoniouseLM().getSize());
-        System.out.println("GLM" + dGroup.getGroupGeneralizedLM().getTopK(20));   
-//        System.out.println("GLM:" + dGroup.getGroupGeneralizedLM().getSize());   
-        System.out.println("HGLM" + dGroup.getGroupHGeneralizedLM().getTopK(20));   
-//        System.out.println("HGLM:" + dGroup.getGroupHGeneralizedLM().getSize());   
+        System.out.println("SWLM" + dGroup.getGroupSWLM().getTopK(20));   
+//        System.out.println("GLM:" + dGroup.getGroupSWLM().getSize());   
+        System.out.println("HSWLM" + dGroup.getGroupHSWLM().getTopK(20));   
+//        System.out.println("HGLM:" + dGroup.getGroupHSWLM().getSize());   
     }
 
 }

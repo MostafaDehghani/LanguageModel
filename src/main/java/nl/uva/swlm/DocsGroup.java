@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nl.uva.generalinzedlm;
+package nl.uva.swlm;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,8 +28,8 @@ public class DocsGroup {
     public String field;
     public ArrayList<Integer> docs;
     public ArrayList<Double> docsPrior;
-    private LanguageModel groupGeneralizedLM;
-    private LanguageModel groupHGeneralizedLM;
+    private LanguageModel groupSWLM;
+    private LanguageModel groupHSWLM;
     private LanguageModel groupParsimoniouseLM;
     private LanguageModel groupStandardLM;
     private LanguageModel GroupSpecificLM;
@@ -50,21 +50,21 @@ public class DocsGroup {
         return this.groupStandardLM;
     }
 
-    public LanguageModel getGroupGeneralizedLM() throws IOException {
-        if (this.groupGeneralizedLM == null) {
-            GroupGLM gGLM = new GroupGLM(this);
-            this.groupGeneralizedLM = new LanguageModel(gGLM.getModel());
+    public LanguageModel getGroupSWLM() throws IOException {
+        if (this.groupSWLM == null) {
+            GroupSWLM gGLM = new GroupSWLM(this);
+            this.groupSWLM = new LanguageModel(gGLM.getModel());
         }
-        return this.groupGeneralizedLM;
+        return this.groupSWLM;
     }
     
 
-    public LanguageModel getGroupHGeneralizedLM() throws IOException {
-        if (this.groupHGeneralizedLM == null) {
-            GroupHGLM gHGLM = new GroupHGLM(this);
-            this.groupHGeneralizedLM = new LanguageModel(gHGLM.getModel());
+    public LanguageModel getGroupHSWLM() throws IOException {
+        if (this.groupHSWLM == null) {
+            GroupHSWLM gHGLM = new GroupHSWLM(this);
+            this.groupHSWLM = new LanguageModel(gHGLM.getModel());
         }
-        return this.groupHGeneralizedLM;
+        return this.groupHSWLM;
     }
     
     
@@ -223,7 +223,7 @@ public class DocsGroup {
     
     public HashMap<Integer, HashMap<Integer, Double>> getGroupLearnedLambdas() throws IOException {
         if (this.lambdas == null) {
-            GroupGLM gGLM = new GroupGLM(this);
+            GroupSWLM gGLM = new GroupSWLM(this);
             this.lambdas = gGLM.getLambdas();
         }
         return this.lambdas;

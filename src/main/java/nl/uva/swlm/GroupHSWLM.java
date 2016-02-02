@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nl.uva.generalinzedlm;
+package nl.uva.swlm;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -17,18 +17,18 @@ import nl.uva.lm.StandardLM;
  *
  * @author Mostafa Dehghani
  */
-public class GroupHGLM extends LanguageModel { //p(theta_r|t)
+public class GroupHSWLM extends LanguageModel { //p(theta_r|t)
 
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(GroupHGLM.class.getName());
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(GroupHSWLM.class.getName());
 
 
     private HashMap<Integer, LanguageModel> docsSLM;
     private HashMap<Integer, LanguageModel> docsHPLM;
     private LanguageModel groupHPLM;
-    private LanguageModel groupHGLM;
+    private LanguageModel groupHSWLM;
     private DocsGroup group;
 
-    public GroupHGLM(DocsGroup group) throws IOException {
+    public GroupHSWLM(DocsGroup group) throws IOException {
         this.group = group;
 
         
@@ -52,8 +52,8 @@ public class GroupHGLM extends LanguageModel { //p(theta_r|t)
         Set<String> allDocTerms = new HashSet<String>();
         for(LanguageModel dlm: this.docsHPLM.values())
             allDocTerms.addAll(dlm.getTerms());
-        this.groupHGLM  = new ParsimoniousLM(this.groupHPLM,this.group.getSpecificLM(allDocTerms,docsHPLM));
+        this.groupHSWLM  = new ParsimoniousLM(this.groupHPLM,this.group.getSpecificLM(allDocTerms,docsHPLM));
         
-        this.setModel(this.groupHGLM.getModel());
+        this.setModel(this.groupHSWLM.getModel());
     }
 }

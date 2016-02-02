@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nl.uva.generalinzedlm;
+package nl.uva.swlm;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -13,9 +13,9 @@ import nl.uva.lm.LanguageModel;
  *
  * @author Mostafa Dehghani
  */
-public class GroupGLM extends LanguageModel { //p(theta_r|t)
+public class GroupSWLM extends LanguageModel { //p(theta_r|t)
 
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(GroupGLM.class.getName());
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(GroupSWLM.class.getName());
 
 
     private final Integer relavanceModelIndex = 0;
@@ -35,7 +35,7 @@ public class GroupGLM extends LanguageModel { //p(theta_r|t)
     private DocsGroup group;
     private Integer numberOfItereation = 10;
 
-    public GroupGLM(DocsGroup group) throws IOException {
+    public GroupSWLM(DocsGroup group) throws IOException {
         this.group = group;
 
         //Fetcing termVectors from index
