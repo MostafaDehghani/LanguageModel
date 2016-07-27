@@ -12,7 +12,6 @@ import org.apache.lucene.analysis.core.LowerCaseFilter;
 import org.apache.lucene.analysis.core.StopFilter;
 import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.en.PorterStemFilter;
-import org.apache.lucene.analysis.miscellaneous.LengthFilter;
 import org.apache.lucene.analysis.miscellaneous.WordDelimiterFilter;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.standard.StandardFilter;
@@ -25,10 +24,10 @@ import org.apache.lucene.analysis.util.FilteringTokenFilter;
  *
  * @author Mostafa Dehghani
  */
-public class MyAnalyzer {
+public class MyAnalyzer{
 
     private String eol = System.getProperty("line.separator");
-    private Integer tokenMinLength = Integer.MIN_VALUE;
+    private Integer tokenMinLength = 0;
     private Integer tokenMaxLength = Integer.MAX_VALUE;
     
 
@@ -154,10 +153,10 @@ public class MyAnalyzer {
     
     private TokenStream getStandardTokenStream(TokenStream tokenStream){
         tokenStream = new LowerCaseFilter(tokenStream);
-        tokenStream = new WordDelimiterFilter(tokenStream, WordDelimiterFilter.GENERATE_NUMBER_PARTS, null);
-        tokenStream = new WordDelimiterFilter(tokenStream, WordDelimiterFilter.GENERATE_WORD_PARTS, null);
-        tokenStream = new LengthFilter(tokenStream, tokenMinLength, tokenMaxLength);
-        tokenStream = new RemoveNumberFilter(tokenStream);
+//        tokenStream = new WordDelimiterFilter(tokenStream, WordDelimiterFilter.GENERATE_NUMBER_PARTS, null);
+//        tokenStream = new WordDelimiterFilter(tokenStream, WordDelimiterFilter.GENERATE_WORD_PARTS, null);
+//        tokenStream = new LengthFilter(tokenStream, tokenMinLength, tokenMaxLength);
+//        tokenStream = new RemoveNumberFilter(tokenStream);
         return  tokenStream;
     }
 

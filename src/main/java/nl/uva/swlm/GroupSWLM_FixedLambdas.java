@@ -13,13 +13,12 @@ import nl.uva.lm.LanguageModel;
  *
  * @author Mostafa Dehghani
  */
-public class GroupSWLM extends LanguageModel { //p(theta_r|t)
+public class GroupSWLM_FixedLambdas extends LanguageModel { //p(theta_r|t)
 
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(GroupSWLM.class.getName());
-
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(GroupSWLM_FixedLambdas.class.getName());
 
     private final Integer relavanceModelIndex = 0;
-    
+
     private final HashMap<Integer, LanguageModel> docsTermVectors;
 
     //For each Model, for each document, for each term
@@ -28,14 +27,18 @@ public class GroupSWLM extends LanguageModel { //p(theta_r|t)
 
     //For each model, for each document
     private HashMap<Integer, HashMap<Integer, Double>> lambda_X_d; // Lambda_x = p(\theta_x|d) --> Coefficient of each model in each document
-    
+
     //For each model, for each term
-    private HashMap<Integer, LanguageModel> models; 
-    
+    private HashMap<Integer, LanguageModel> models;
+
     private final DocsGroup group;
     private final Integer numberOfItereation = 100;
+//
+//    public GroupSWLM_FixedLambdas(DocsGroup group) throws IOException {
+//        this(group, 0.0002D, 0.4999D, 0.4999D);
+//    }
 
-    public GroupSWLM(DocsGroup group) throws IOException {
+public GroupSWLM_FixedLambdas(DocsGroup group, Double lambda_r, Double lambda_g, Double lambda_s) throws IOException {
         this.group = group;
 
         //Fetcing termVectors from index
@@ -59,13 +62,12 @@ public class GroupSWLM extends LanguageModel { //p(theta_r|t)
         for (Integer m : models.keySet()) {
             HashMap<Integer, Double> docsHM = new HashMap<>();
             for (int id : group.docs) {
-//                if(m==0) //Relavance Model
-//                    docsHM.put(id, 0.0001D);
-//                if(m==1)  //General Model
-//                    docsHM.put(id, 0.4999D);
-//                if(m==2) //Specific Model
-//                    docsHM.put(id, 0.5D);
-                docsHM.put(id, 1.0 / models.size());
+                if(m==0) //Relavance Model
+                    docsHM.put(id,lambda_r );
+                if(m==1)  //General Model
+                    docsHM.put(id, lambda_g);
+                if(m==2) //Specific Model
+                    docsHM.put(id, lambda_s);
             }
             lambda_X_d.put(m, docsHM);
         }
@@ -117,9 +119,7 @@ public class GroupSWLM extends LanguageModel { //p(theta_r|t)
                 denominator_relModel = this.Get_M_step_denominator_relModel(modelToBeUpdate);
             }
             HashMap<Integer, LanguageModel> docsHM = this.modelSelectionProb.get(m);
-            HashMap<Integer, Double> lambdas = new HashMap<>();
             for (Integer id : docsHM.keySet()) {
-                Double denominator_Lambda = this.Get_M_step_denominator_Lambda(id);
                 for (String term : docsHM.get(id).getTerms()) {
                     // Updating relevance Model
                     if (m.equals(modelToBeUpdate)) {
@@ -128,11 +128,7 @@ public class GroupSWLM extends LanguageModel { //p(theta_r|t)
                             this.models.get(m).setProb(term, newProb);
                     }
                 }
-//                 Updating Lambdas
-               Double newLambda = this.Get_M_step_numerator_Lambda(m, id) / denominator_Lambda;
-               lambdas.put(id, newLambda);
             }
-            this.lambda_X_d.put(m, lambdas);
         }
     }
 
@@ -146,15 +142,6 @@ public class GroupSWLM extends LanguageModel { //p(theta_r|t)
         return numerator;
     }
 
-    private Double Get_M_step_numerator_Lambda(Integer m, Integer did) {
-        Double numerator = 0D;
-        HashMap<Integer, LanguageModel> docsHM = this.modelSelectionProb.get(m);
-        for (String term : docsHM.get(did).getTerms()) {
-            Double tf = this.docsTermVectors.get(did).getProb(term);
-            numerator += tf * docsHM.get(did).getProb(term);
-        }
-        return numerator;
-    }
 
     private Double Get_M_step_denominator_relModel(Integer m) {
         Double denominator = 0D;
@@ -168,17 +155,6 @@ public class GroupSWLM extends LanguageModel { //p(theta_r|t)
         return denominator;
     }
 
-    private Double Get_M_step_denominator_Lambda(Integer did) {
-        Double denominator = 0D;
-        for (Integer m : models.keySet()) {
-            HashMap<Integer, LanguageModel> docsHM = this.modelSelectionProb.get(m);
-            for (String term : docsHM.get(did).getTerms()) {
-                Double tf = this.docsTermVectors.get(did).getProb(term);
-                denominator += tf * docsHM.get(did).getProb(term);
-            }
-        }
-        return denominator;
-    }
 
     public void CalculateGLM() {
         for (int i = 0; i < this.numberOfItereation; i++) {

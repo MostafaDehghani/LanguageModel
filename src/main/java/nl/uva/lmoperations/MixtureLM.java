@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nl.uva.lm;
+package nl.uva.lmoperations;
 
 import java.util.HashSet;
 import java.util.Map.Entry;
+import nl.uva.lm.LanguageModel;
 
 /**
  *

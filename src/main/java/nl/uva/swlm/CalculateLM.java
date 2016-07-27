@@ -33,8 +33,8 @@ public class CalculateLM {
         IndexReader ireader = DirectoryReader.open(FSDirectory.open(ipath));
         
         DocsGroup dGroup = new DocsGroup(ireader, "TEXT", docsList);
-        System.out.println("CLM" + dGroup.getCollectionLM().getTopK(20));
-//        System.out.println("CLM:" + dGroup.getCollectionLM().getSize());
+        System.out.println("CLM" + dGroup.getGeneralLM().getTopK(20));
+//        System.out.println("CLM:" + dGroup.getGeneralLM().getSize());
         System.out.println("STLM" + dGroup.getGroupStandardLM().getTopK(20));
 //        System.out.println("STLM:" + dGroup.getGroupStandardLM().getSize());
         System.out.println("SPLM" + dGroup.getGroupSpecificLM().getTopK(20));

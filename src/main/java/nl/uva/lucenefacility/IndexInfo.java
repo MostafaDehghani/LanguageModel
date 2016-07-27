@@ -418,6 +418,15 @@ public class IndexInfo {
     public String getDocStringId(Integer docID) throws IOException {
         return ireader.document(docID).get("ID");
     }
+    
+    public String getDocText(Integer docID) throws IOException {
+        return ireader.document(docID).get("Text");
+    }
+    
+    public String getDocFieldValue(Integer docID, String field) throws IOException {
+        return ireader.document(docID).get(field);
+    }
+    
 
     public HashMap<String, Double> getDocTermFreqVector(Integer docId, String field) throws IOException {
         HashMap<String, Double> TV = new HashMap<>();
@@ -482,6 +491,7 @@ public class IndexInfo {
      
     public ArrayList<Integer> getDocsContainingTerm(String fieldName,String term) throws IOException {
         
+//      TODO: reimpliment it by "TermRangeFilter"
         ArrayList<Integer> docs = new ArrayList<>();
         TermsEnum te = MultiFields.getTerms(this.ireader, fieldName ).iterator();
         BytesRef id = new BytesRef(term);

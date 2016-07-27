@@ -29,6 +29,7 @@ public class DocsGroup {
     public ArrayList<Integer> docs;
     public ArrayList<Double> docsPrior;
     private LanguageModel groupSWLM;
+    private LanguageModel groupSWLM_fixdlambdas;
     private LanguageModel groupHSWLM;
     private LanguageModel groupParsimoniouseLM;
     private LanguageModel groupStandardLM;
@@ -42,6 +43,14 @@ public class DocsGroup {
         this.field = field;
         this.iInfo = new IndexInfo(this.iReader);
     }
+    
+    public DocsGroup(IndexReader iReader, String field, ArrayList<Integer> docs, LanguageModel CollectionLM) {
+        this.iReader = iReader;
+        this.docs = docs;
+        this.field = field;
+        this.iInfo = new IndexInfo(this.iReader);
+        this.CollectionLM = CollectionLM;
+    }
 
     public LanguageModel getGroupStandardLM() throws IOException {
         if (this.groupStandardLM == null) {
@@ -52,10 +61,18 @@ public class DocsGroup {
 
     public LanguageModel getGroupSWLM() throws IOException {
         if (this.groupSWLM == null) {
-            GroupSWLM gGLM = new GroupSWLM(this);
-            this.groupSWLM = new LanguageModel(gGLM.getModel());
+            GroupSWLM gSWLM = new GroupSWLM(this);
+            this.groupSWLM = new LanguageModel(gSWLM.getModel());
         }
         return this.groupSWLM;
+    }
+    
+    public LanguageModel getGroupSWLM_fixdlambdas(Double def_lambda_r, Double def_lambda_g, Double def_lambda_s) throws IOException {
+        if (this.groupSWLM_fixdlambdas == null) {
+            GroupSWLM_FixedLambdas gSWLM_fl = new GroupSWLM_FixedLambdas(this,def_lambda_r, def_lambda_g,def_lambda_s);
+            this.groupSWLM_fixdlambdas = new LanguageModel(gSWLM_fl.getModel());
+        }
+        return this.groupSWLM_fixdlambdas;
     }
     
 
@@ -71,13 +88,13 @@ public class DocsGroup {
 
     public LanguageModel getGroupParsimoniouseLM() throws IOException {
         if (this.groupParsimoniouseLM == null) {
-            this.groupParsimoniouseLM = new ParsimoniousLM(this.getGroupStandardLM(), this.getCollectionLM());
+            this.groupParsimoniouseLM = new ParsimoniousLM(this.getGroupStandardLM(), this.getGeneralLM());
 //            this.groupParsimoniouseLM = new ParsimoniousLM(this.getGroupStandardLM(), this.getGroupSpecificLM());
         }
         return this.groupParsimoniouseLM;
     }
 
-    public LanguageModel getCollectionLM() throws IOException {
+    public LanguageModel getGeneralLM() throws IOException {
         if (this.CollectionLM == null) {
             this.CollectionLM = new CollectionSLM(this.iReader, this.field);
         }
@@ -95,7 +112,7 @@ public class DocsGroup {
                 StandardLM docSLM = new StandardLM(this.iReader, id, this.field);
                 docsLMs.put(id, docSLM);
 //                StandardLM docSLM = new StandardLM(this.iReader, id, this.field);
-//                ParsimoniousLM docPLM = new ParsimoniousLM(docSLM,this.getCollectionLM());
+//                ParsimoniousLM docPLM = new ParsimoniousLM(docSLM,this.getGeneralLM());
 //                docsLMs.put(id, docPLM);
             }
             

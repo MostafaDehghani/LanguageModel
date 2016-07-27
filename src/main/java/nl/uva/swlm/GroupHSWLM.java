@@ -40,12 +40,12 @@ public class GroupHSWLM extends LanguageModel { //p(theta_r|t)
         
         this.docsHPLM = new HashMap<>();
         for (int id : this.group.docs) {
-            ParsimoniousLM  hplm = new ParsimoniousLM(this.docsSLM.get(id),this.group.getCollectionLM());
+            ParsimoniousLM  hplm = new ParsimoniousLM(this.docsSLM.get(id),this.group.getGeneralLM());
             hplm = new ParsimoniousLM(hplm,this.group.getGroupStandardLM());
             this.docsHPLM.put(id, hplm);
         }
         
-        this.groupHPLM = new ParsimoniousLM(this.group.getGroupStandardLM(),this.group.getCollectionLM());
+        this.groupHPLM = new ParsimoniousLM(this.group.getGroupStandardLM(),this.group.getGeneralLM());
 //        for (int id : this.group.docs) {
 //            this.HGLM  = new ParsimoniousLM(this.HGLM,this.docsHPLM.get(id));
 //        }

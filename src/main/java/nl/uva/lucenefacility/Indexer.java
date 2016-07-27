@@ -34,12 +34,12 @@ public abstract class Indexer {
 
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Indexer.class.getName());
     protected IndexWriter writer;
-    private final Boolean stemming = configFile.getProperty("IF_STEMMING").equals("1"); 
-    private final Boolean stopWordsRemoving = configFile.getProperty("IF_STOPWORDS_REMOVING").equals("1");
+    protected final Boolean stemming = configFile.getProperty("IF_STEMMING").equals("1"); 
+    protected final Boolean stopWordsRemoving = configFile.getProperty("IF_STOPWORDS_REMOVING").equals("1");
     private final Boolean commonWordsRemoving = configFile.getProperty("IF_COMMONWORDS_REMOVING").equals("1");
     private final Integer commonWordNum = Integer.parseInt(configFile.getProperty("COMMON_WORDS_NUM"));
     protected final Integer minDocLength = Integer.parseInt(configFile.getProperty("MIN_DOC_LENGTH"));
-    private Map<String, Analyzer> analyzerMap = new HashMap<>();
+    protected Map<String, Analyzer> analyzerMap = new HashMap<>();
     protected Integer docCount = 0;
     
     public Indexer(String indexPathString) throws Exception, Throwable {
@@ -128,7 +128,7 @@ public abstract class Indexer {
 
     protected abstract void analyzerMapInitializer(Map<String, Analyzer> analyzerMap);
 
-    private void IndexesCleaner(String path) {
+    protected void IndexesCleaner(String path) {
         try {
             File Index = new File(path);
             if (Index.exists()) {
@@ -143,7 +143,7 @@ public abstract class Indexer {
         }
     }
 
-    private ArrayList<String> LoadStopwords() throws FileNotFoundException, IOException {
+    protected ArrayList<String> LoadStopwords() throws FileNotFoundException, IOException {
         ArrayList<String> stoplist = new ArrayList<>();
         File stopfile = new File(configFile.getProperty("STOPWORDS_PATH"));
         try (BufferedReader br = new BufferedReader(new FileReader(stopfile))) {
