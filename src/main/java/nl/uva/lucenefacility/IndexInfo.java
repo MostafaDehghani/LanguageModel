@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.index.DocsEnum;
 import org.apache.lucene.index.Fields;
 import org.apache.lucene.index.IndexReader;
@@ -420,8 +422,13 @@ public class IndexInfo {
     }
     
     public String getDocText(Integer docID) throws IOException {
-        return ireader.document(docID).get("Text");
+        return ireader.document(docID).get("TEXT");
     }
+    
+    public String getDocAnalyezedText(Integer docID) throws IOException {
+        return ireader.document(docID).getField("TEXT").stringValue();
+    }
+    
     
     public String getDocFieldValue(Integer docID, String field) throws IOException {
         return ireader.document(docID).get(field);
